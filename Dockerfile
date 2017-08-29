@@ -6,6 +6,8 @@ RUN wget http://pjreddie.com/media/files/tiny-yolo-voc.weights
 RUN wget http://pjreddie.com/media/files/yolo-voc.weights
 
 RUN git clone https://github.com/pjreddie/darknet
+WORKDIR /darknet
+RUN git checkout 9726f1e89c29fb9a8802f0a544e2cc79aafa67ff
 COPY darknet_patch.txt /darknet/
 WORKDIR /darknet
 
