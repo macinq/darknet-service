@@ -1,9 +1,9 @@
 FROM buildpack-deps:jessie
 
 # get darknet weights
-RUN wget http://pjreddie.com/media/files/yolo.weights
-RUN wget http://pjreddie.com/media/files/tiny-yolo-voc.weights
-RUN wget http://pjreddie.com/media/files/yolo-voc.weights
+RUN wget https://pjreddie.com/media/files/yolov2.weights
+RUN wget https://pjreddie.com/media/files/yolov2-tiny-voc.weights
+RUN wget https://pjreddie.com/media/files/yolov2-voc.weights
 
 RUN git clone https://github.com/pjreddie/darknet
 WORKDIR /darknet
