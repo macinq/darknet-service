@@ -4,7 +4,10 @@ Use [darknet](https://pjreddie.com/darknet/yolo/) object detection from an API:
 
 ```shell
 docker build -t darknet .
-docker run --rm -p 0.0.0.0:3000:3000 --name running-darknet darknet
+# foreground docker process
+docker run --gpus all --rm -p 0.0.0.0:3000:3000 --name running-darknet darknet
+# background docker process
+docker run --gpus all -d --rm -p 0.0.0.0:3000:3000 --name running-darknet darknet
 ```
 
 You can request the service with curl like:
