@@ -15,19 +15,10 @@ app.post('/yolo', upload.single('photo'), function (req, res, next) {
   })
 })
 
-app.post('/yolo-tiny', upload.single('photo'), function (req, res, next) {
+app.post('/yolo-tiny-3l', upload.single('photo'), function (req, res, next) {
   var filename = `./${req.file.destination}${req.file.filename}`
   console.log(`-- yolo-tiny received --: ${filename}`)
   darknet['yolo-tiny'](filename, function (data) {
-    res.json(data)
-    fs.unlink(filename, d => {})
-  })
-})
-
-app.post('/yolo-voc', upload.single('photo'), function (req, res, next) {
-  var filename = `./${req.file.destination}${req.file.filename}`
-  console.log(`-- yolo-voc received --: ${filename}`)
-  darknet['yolo-voc'](filename, function (data) {
     res.json(data)
     fs.unlink(filename, d => {})
   })

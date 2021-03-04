@@ -14,7 +14,7 @@ You can request the service with curl like:
 
 ```shell
 curl -F "photo=@my_photo.jpg" localhost:3000/yolo
-curl -F "photo=@my_photo.jpg" localhost:3000/yolo-tiny
+curl -F "photo=@my_photo.jpg" localhost:3000/yolo-tiny-3l
 ```
 
 Read more about darknet <https://pjreddie.com/darknet/yolo/>
