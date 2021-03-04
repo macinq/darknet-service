@@ -2,7 +2,16 @@ FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt-get update && apt-get install -y wget curl git build-essential tcl pkg-config python3-opencv libopencv-dev
+RUN apt-get update && apt-get install -y wget curl git build-essential tcl pkg-config python3-opencv libopencv-dev ubuntu-drivers-common && sudo ubuntu-drivers autoinstall
+
+RUN cat nvidia-container-runtime-script.sh
+RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | sudo apt-key add -distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
+RUN sudo apt-get update
+RUN sh nvidia-container-runtime-script.sh
+RUN apt-get install nvidia-container-runtime
+RUN which nvidia-container-runtime-hook /usr/bin/nvidia-container-runtime-hook
+
 # get darknet weights
 RUN wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.conv.137
 # RUN curl -L -o yolov3.weights https://www.dropbox.com/s/h4zq99f5kqk76rr/yolov3.weights?dl=1
