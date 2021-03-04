@@ -5,9 +5,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 RUN apt-get update && apt-get install -y wget curl git build-essential tcl pkg-config python3-opencv libopencv-dev ubuntu-drivers-common && ubuntu-drivers autoinstall
 
 RUN cat nvidia-container-runtime-script.sh
-RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | sudo apt-key add -distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
-RUN sudo apt-get update
+# RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | sudo apt-key add -distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+# RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
+# RUN sudo apt-get update
 RUN sh nvidia-container-runtime-script.sh
 RUN apt-get install nvidia-container-runtime
 RUN which nvidia-container-runtime-hook /usr/bin/nvidia-container-runtime-hook
