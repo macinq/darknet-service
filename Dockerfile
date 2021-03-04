@@ -2,7 +2,7 @@ FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt-get update && apt-get install -y wget curl git build-essential tcl pkg-config
+RUN apt-get update && apt-get install -y wget curl git build-essential tcl pkg-config python3-opencv
 # get darknet weights
 RUN wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.conv.137
 # RUN curl -L -o yolov3.weights https://www.dropbox.com/s/h4zq99f5kqk76rr/yolov3.weights?dl=1
@@ -24,7 +24,7 @@ RUN sed -i 's/width = im.h \* .002/width = im.h \* .001/g' src/image.c
 
 RUN make
 
-RUN cp data/obj.names data/coco.names
+# RUN cp data/obj.names data/coco.names
 
 # install node and use the lts version
 RUN curl -L https://git.io/n-install | bash -s -- -y lts
