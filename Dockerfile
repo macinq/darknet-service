@@ -12,12 +12,12 @@ RUN wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_p
 
 RUN git clone https://github.com/AlexeyAB/darknet.git
 WORKDIR /darknet
-RUN git checkout darknet-service
-COPY darknet_patch.txt /darknet/
-WORKDIR /darknet
+# RUN git checkout darknet-service
+# COPY darknet_patch.txt /darknet/
+# WORKDIR /darknet
 
 # change the default print format to allow me to interface it
-RUN git apply darknet_patch.txt
+# RUN git apply darknet_patch.txt
 
 RUN sed -i 's/OPENCV=0/OPENCV=1/g' Makefile
 RUN sed -i 's/GPU=0/GPU=1/g' Makefile
@@ -37,8 +37,8 @@ RUN make
 RUN curl -L https://git.io/n-install | bash -s -- -y lts
 COPY /server/* /darknet/
 # install npm deps
-# RUN bash -c 'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"; npm install'
-RUN bash -c 'source /root/.bashrc; npm install'
+RUN bash -c 'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"; npm install'
+# RUN bash -c 'source /root/.bashrc; npm install'
 
 EXPOSE 3000
 
