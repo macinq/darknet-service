@@ -20,10 +20,10 @@ WORKDIR /darknet
 # RUN git apply darknet_patch.txt
 
 RUN sed -i 's/OPENCV=0/OPENCV=1/g' Makefile
-RUN sed -i 's/GPU=0/GPU=1/g' Makefile
-RUN sed -i 's/CUDNN=0/CUDNN=1/g' Makefile
-RUN sed -i "s/ARCH= -gencode arch=compute_60,code=sm_60/ARCH= -gencode arch=compute_${compute_capability},code=sm_${compute_capability}/g" Makefile
-RUN sed -i 's/CUDNN_HALF=0/CUDNN_HALF=1/' Makefile
+RUN sed -i 's/GPU=1/GPU=0/g' Makefile
+RUN sed -i 's/CUDNN=1/CUDNN=0/g' Makefile
+RUN sed -i 's/AVX=0/AVX=1/g' Makefile
+RUN sed -i 's/OPENMP=0/OPENMP=1/g' Makefile
 
 # frames resizing
 RUN sed -i 's/get_label_v3(alphabet, labelstr, (im.h\*.02))/get_label_v3(alphabet, labelstr, (im.h\*.005))/g' src/image.c
