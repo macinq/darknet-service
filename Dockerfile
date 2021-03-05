@@ -2,15 +2,7 @@ FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu18.04
 ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Moscow
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-RUN apt-get update && apt-get install -y wget curl git build-essential tcl pkg-config python3-opencv libopencv-dev ubuntu-drivers-common && ubuntu-drivers autoinstall
-
-RUN cat nvidia-container-runtime-script.sh
-# RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | sudo apt-key add -distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
-# RUN curl -s -L https://nvidia.github.io/nvidia-container-runtime/$distribution/nvidia-container-runtime.list | sudo tee /etc/apt/sources.list.d/nvidia-container-runtime.list
-# RUN sudo apt-get update
-RUN sh nvidia-container-runtime-script.sh
-RUN apt-get install nvidia-container-runtime
-RUN which nvidia-container-runtime-hook /usr/bin/nvidia-container-runtime-hook
+RUN apt-get update && apt-get install -y wget curl git build-essential tcl pkg-config python3-opencv libopencv-dev 
 
 # get darknet weights
 RUN wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.conv.137
@@ -20,6 +12,12 @@ RUN wget https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_p
 
 RUN git clone https://github.com/AlexeyAB/darknet.git
 WORKDIR /darknet
+RUN git checkout darknet-service
+COPY darknet_patch.txt /darknet/
+WORKDIR /darknet
+
+# change the default print format to allow me to interface it
+RUN git apply darknet_patch.txt
 
 RUN sed -i 's/OPENCV=0/OPENCV=1/g' Makefile
 RUN sed -i 's/GPU=0/GPU=1/g' Makefile
@@ -39,7 +37,8 @@ RUN make
 RUN curl -L https://git.io/n-install | bash -s -- -y lts
 COPY /server/* /darknet/
 # install npm deps
-RUN bash -c 'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"; npm install'
+# RUN bash -c 'export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"; npm install'
+RUN bash -c 'source /root/.bashrc; npm install'
 
 EXPOSE 3000
 
