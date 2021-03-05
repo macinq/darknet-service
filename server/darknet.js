@@ -7,30 +7,55 @@ function spawn (name, cmd, args) {
 
   var yolo = cp.spawn(cmd, args)
 
+  var filename = null
   yolo.stdout.on('data', (data) => {
+
+    if (data.toString().includes("./uploads/")) {
+      filename = data.toString().split(':')[0]
+    }
     var lines = data.toString().split('\n')
-    var filename = null
+
     for (var i = 0; i < lines.length; i++) {
       data = lines[i]
-      if (data.includes('filename')) {
-        // data line update the file data list
-        data = JSON.parse(data)
-        filename = data.filename
-        delete data.filename
+      if (data.includes("%")) {
         working[filename].data.push(data)
-      } else if (data.includes('detection done')) {
-        // detection just finished
-        filename = data.split(':')[1]
-        working[filename].callback(
-          working[filename].data
-        )
       } else if (data.includes('Enter Image Path')) {
+        if (working[filename] !== undefined && working[filename].data != undefined && working[filename].data.length !== 0) {
+          working[filename].callback(
+            working[filename].data
+          )
+        }
         // ready to start working again
         yoloReady = true
         console.log(`-- ${name} detector ready --`)
       }
     }
   })
+
+  // yolo.stdout.on('data', (data) => {
+  //   var lines = data.toString().split('\n')
+  //   var filename = null
+  //   for (var i = 0; i < lines.length; i++) {
+  //     data = lines[i]
+  //     if (data.includes('filename')) {
+  //       // data line update the file data list
+  //       data = JSON.parse(data)
+  //       filename = data.filename
+  //       delete data.filename
+  //       working[filename].data.push(data)
+  //     } else if (data.includes('detection done')) {
+  //       // detection just finished
+  //       filename = data.split(':')[1]
+  //       working[filename].callback(
+  //         working[filename].data
+  //       )
+  //     } else if (data.includes('Enter Image Path')) {
+  //       // ready to start working again
+  //       yoloReady = true
+  //       console.log(`-- ${name} detector ready --`)
+  //     }
+  //   }
+  // })
 
   yolo.on('close', (code) => {
     console.log(`-- ${name} detector exited --`)
